@@ -1,6 +1,7 @@
 (ns amble.endpoints.player-test
-  (:require [amble.helpers :refer [is-valid?]]
+  (:require [amble.helpers :refer [is-valid? delete-game-afterwards!]]
             [amble.specs :as amble-specs]
+            [amble.config :refer [server-url]]
             [clj-http.client :as http-client]
             [clojure.test :refer :all]))
 
@@ -8,12 +9,13 @@
 
 (deftest player-endpoints
   (testing "get players"
-    (let [_ (http-client/post "http://localhost:3000/game"
+    (let [_ (http-client/post (str server-url "/game")
                               {:form-params  {:game-id game-id}
                                :content-type :json})
 
           response (http-client/get (format
-                                     "http://localhost:3000/game/%s/player"
+                                     "%s/game/%s/player"
+                                     server-url
                                      game-id)
                                     {:content-type :json
                                      :as :auto})]
@@ -25,7 +27,8 @@
   (testing "get player"
     (let [response (http-client/get
                     (format
-                     "http://localhost:3000/game/%s/player/player-one"
+                     "%s/game/%s/player/player-one"
+                     server-url
                      game-id)
                     {:content-type :json
                      :as :auto})]
@@ -38,13 +41,4 @@
                  (:body response)))))
 
 
-(use-fixtures
- :each
- (fn [f]
-   (f)
-   ;; teardown
-   (let [response (http-client/delete (str "http://localhost:3000/game/"
-                                           game-id))]
-     (assert (= 200 (:status response))))))
-
-
+(delete-game-afterwards! game-id)

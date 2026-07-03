@@ -1,5 +1,2 @@
-# clj -X:test :nses ["amble.endpoints.ping-test"]
-# clj -X:test :nses ["amble.endpoints.move-test"]
-# clj -X:test :nses ["amble.endpoints.player-test"]
-# clj -X:test :nses ["amble.endpoints.game-test"]
-clj -X:test
+SERVER_URL=http://localhost:3000 clj -X:test
+# SERVER_URL=http://localhost:3000 clj -X:test :nses ["amble.endpoints.ping-test"]

@@ -1,6 +1,7 @@
 (ns amble.endpoints.move-test
-  (:require [amble.helpers :refer [is-valid?]]
+  (:require [amble.helpers :refer [is-valid? delete-game-afterwards!]]
             [amble.specs :as amble-specs]
+            [amble.config :refer [server-url]]
             [clj-http.client :as http-client]
             [clojure.test :refer :all]))
 
@@ -14,7 +15,7 @@
 
 (deftest move-endpoints
   (testing "get moves"
-    (let [_ (http-client/post "http://localhost:3000/game"
+    (let [_ (http-client/post (str server-url "/game")
                               {:form-params  {:game-id game-id}
                                :content-type :json})
 
@@ -25,7 +26,8 @@
                                                    player-two-first-move-coords]
                                                   [0 1])]
               (http-client/post
-               (format "http://localhost:3000/game/%s/player/%s/move/%s"
+               (format "%s/game/%s/player/%s/move/%s"
+                       server-url
                        game-id
                        (name player)
                        0)
@@ -40,7 +42,8 @@
                                :client-id (str "dummyclientid" i)}
                 :content-type :json}))
 
-          response (http-client/get (format "http://localhost:3000/game/%s/move"
+          response (http-client/get (format "%s/game/%s/move"
+                                            server-url
                                             game-id)
                                     {:content-type :json
                                      :as :auto})]
@@ -53,7 +56,8 @@
 
   (testing "get move"
     (let [response (http-client/get (format
-                                     "http://localhost:3000/game/%s/move/%s"
+                                     "%s/game/%s/move/%s"
+                                     server-url
                                      game-id
                                      0)
                                     {:content-type :json
@@ -66,13 +70,15 @@
   (testing "delete move"
     (let [response       (http-client/delete
                           (format
-                           "http://localhost:3000/game/%s/move/%s"
+                           "%s/game/%s/move/%s"
+                           server-url
                            game-id
                            0)
                           {:content-type :json
                            :as :auto})
           moves-response (http-client/get (format
-                                           "http://localhost:3000/game/%s/move"
+                                           "%s/game/%s/move"
+                                           server-url
                                            game-id)
                                           {:content-type :json
                                            :as :auto})]
@@ -81,14 +87,4 @@
       (is (= ["1"]
              (:body moves-response))))))
 
-
-(use-fixtures
- :each
- (fn [f]
-   (f)
-   ;; teardown
-   (let [response (http-client/delete (str "http://localhost:3000/game/"
-                                           game-id))]
-     (assert (= 200 (:status response))))))
-
-
+(delete-game-afterwards! game-id)

@@ -6,7 +6,7 @@
 
 (def game-id "TheDummyGame")
 
-(deftest create-game
+(deftest game-endpoints
   (testing "create game"
     (let [response (http-client/post "http://localhost:3000/game"
                                      {:form-params {:game-id game-id}
@@ -15,21 +15,17 @@
       (is (= 201
              (:status response)))
       (is-valid? ::amble-specs/game
-                 (:body response)))))
+                 (:body response))))
 
-(deftest get-game
   (testing "get game, not found"
     (let [response (http-client/get (str "http://localhost:3000/game/"
-                                         game-id)
+                                         (str game-id 2))
                                     {:throw-exceptions false})]
       (is (= 404
              (:status response)))))
 
   (testing "get game"
-    (let [_ (http-client/post "http://localhost:3000/game"
-                              {:form-params  {:game-id game-id}
-                               :content-type :json})
-          response (http-client/get (str "http://localhost:3000/game/"
+    (let [response (http-client/get (str "http://localhost:3000/game/"
                                          game-id)
                                     {:content-type :json
                                      :as :auto})]

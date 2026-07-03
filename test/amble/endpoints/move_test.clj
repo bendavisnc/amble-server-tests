@@ -13,7 +13,7 @@
   [[0.475 0.2835] [0.5 0.3268]])
 
 
-(deftest get-moves
+(deftest move-endpoints
   (testing "get moves"
     (let [_ (http-client/post "http://localhost:3000/game"
                               {:form-params  {:game-id game-id}
@@ -65,14 +65,23 @@
                  (:body response))))
 
   (testing "delete move"
-    (let [response (http-client/delete (format
-                                        "http://localhost:3000/game/%s/move/%s"
-                                        game-id
-                                        0)
-                                       {:content-type :json
-                                        :as :auto})]
+    (let [response       (http-client/delete
+                          (format
+                           "http://localhost:3000/game/%s/move/%s"
+                           game-id
+                           0)
+                          {:content-type :json
+                           :as :auto})
+          moves-response (http-client/get (format
+                                           "http://localhost:3000/game/%s/move"
+                                           game-id)
+                                          {:content-type :json
+                                           :as :auto})]
       (is (= 200
-             (:status response))))))
+             (:status response)))
+      (is (= ["1"]
+             (:body moves-response))))))
+
 
 (use-fixtures
  :each

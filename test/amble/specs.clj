@@ -22,23 +22,29 @@
 
 (s/def ::coord (s/tuple number? number?))
 
-(s/def :amble.specs.private/move (s/* ::coord))
-
-
-(s/def ::player-id string?)
+(s/def ::move (s/* ::coord))
 
 (s/def ::player-piece-index string?)
 
 (s/def ::id string?)
 
-(s/def ::move
+(s/def ::player
+  #{"player-one" "player-two" "player-three" "player-four" "player-five"
+    "player-six"})
+
+(s/def ::player-id ::player)
+
+(s/def ::move-with-context
   (s/keys :req-un
           [::game-id
            ::x
            ::y
            ::client-id
-           :amble.specs.private/move
+           ::move
            ::player-id
            ::player-piece-index
            ::id]))
 
+(s/def ::players (s/* ::player))
+
+(s/def ::player-position (s/coll-of ::coord :count 10))

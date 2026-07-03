@@ -12,7 +12,6 @@
 (def player-two-first-move-coords
   [[0.475 0.2835] [0.5 0.3268]])
 
-
 (deftest move-endpoints
   (testing "get moves"
     (let [_ (http-client/post "http://localhost:3000/game"
@@ -61,7 +60,7 @@
                                      :as :auto})]
       (is (= 200
              (:status response)))
-      (is-valid? ::amble-specs/move
+      (is-valid? ::amble-specs/move-with-context
                  (:body response))))
 
   (testing "delete move"

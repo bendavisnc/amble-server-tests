@@ -14,9 +14,9 @@
 
 (s/def ::move-ids (s/* ::move-id))
 
-(s/def ::x string?) ;; todo
+(s/def ::x number?)
 
-(s/def ::y string?)
+(s/def ::y number?)
 
 (s/def ::client-id string?)
 
@@ -24,7 +24,7 @@
 
 (s/def ::move (s/* ::coord))
 
-(s/def ::player-piece-index string?)
+(s/def ::player-piece-index (set (range 10)))
 
 (s/def ::id string?)
 

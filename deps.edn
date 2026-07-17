@@ -2,9 +2,9 @@
            clj-http/clj-http {:mvn/version "3.13.1"}
            cheshire/cheshire {:mvn/version "6.2.0"}
            environ/environ {:mvn/version "1.2.0"}
-           org.apache.logging.log4j/log4j-api {:mvn/version "2.11.0"}
-           org.apache.logging.log4j/log4j-core {:mvn/version "2.11.0"}
-           org.apache.logging.log4j/log4j-1.2-api {:mvn/version "2.11.0"}}
+           org.apache.logging.log4j/log4j-api {:mvn/version "2.26.1"}
+           org.apache.logging.log4j/log4j-core {:mvn/version "2.26.1"}
+           org.apache.logging.log4j/log4j-1.2-api {:mvn/version "2.26.1"}}
 
  :paths ["test", "resources"]
 

@@ -5,9 +5,8 @@
 (defmacro defenv
   [name]
   (let [config-value (environ/env (keyword name))]
-    (assert (some? config-value)
+    (assert (seq config-value)
             (format "Missing config, `%s`." name))
     `(def ~name ~config-value)))
 
 (defenv server-url)
-
